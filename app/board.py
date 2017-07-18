@@ -2,7 +2,7 @@ from model.Field import Field, CityCard, Chance, Railway, Jail
 
 def run():
     fields = getFields()
-    # players = getPlayers()
+    players = getPlayers()
 
 
 def getFields():
@@ -28,5 +28,9 @@ def getFields():
     for field in fields.items():
         objects.append(field[1])
     return objects
+
+
+def getPlayers():
+    pass
 
 run()
