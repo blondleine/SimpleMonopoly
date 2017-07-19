@@ -35,3 +35,4 @@ class Player(object):
     def move_to_jail(self):
         self.position = 5
         self.in_prison = 3
+
