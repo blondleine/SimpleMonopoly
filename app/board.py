@@ -1,4 +1,7 @@
+import random
 from model.Field import Field, CityCard, Chance, Railway, Jail
+
+TOKENS = ["Automobile", "Top Hat", "Penguin", "T-Rex", "Cat"]
 
 def run():
     fields = getFields()
@@ -31,6 +34,19 @@ def getFields():
 
 
 def getPlayers():
-    pass
+    count = int(input("Enter the number of players (2 to 5):"))
 
+    if count in list(range(2,6)):
+        createPlayers(count)
+    else:
+        getPlayers()
+
+
+def createPlayers(count):
+    tokens = random.sample(range(len(TOKENS)), count) #choose random token
+    players = []
+    for i in range(count):
+        players.append(TOKENS[tokens[i]])
+
+    print(players)
 run()
