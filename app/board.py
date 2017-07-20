@@ -5,7 +5,6 @@ def run():
     fields = getFields()
     players = getPlayers()
 
-
 def getFields():
     objects = []
     fields = {

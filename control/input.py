@@ -18,5 +18,4 @@ def createPlayers(count):
 
         players.append(TOKENS[tokens[i]])
 
-    print(players)
     return players
