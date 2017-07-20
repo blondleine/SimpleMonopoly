@@ -3,12 +3,18 @@ import random
 TOKENS = ["Automobile", "Top Hat", "Penguin", "T-Rex", "Cat"]
 
 def getPlayers():
-    count = int(input("Enter the number of players (2 to 5):"))
+    try:
+        count = int(input("Enter the number of players (2 to 5):"))
+    except:
+        count = 0
 
-    if count in list(range(2, 6)):
-        return createPlayers(count)
-    else:
-        getPlayers()
+    while count not in list(range(2, 6)):
+        try:
+            count = int(input("Enter the number of players (2 to 5):"))
+        except:
+            count = 0
+
+    return createPlayers(count)
 
 def createPlayers(count):
     tokens = random.sample(range(len(TOKENS)), count)  # choose random token

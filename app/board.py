@@ -4,6 +4,7 @@ from control.input import getPlayers, createPlayers
 def run():
     fields = getFields()
     players = getPlayers()
+    print(players)
 
 def getFields():
     objects = []
