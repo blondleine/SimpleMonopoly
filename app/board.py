@@ -1,11 +1,19 @@
 import random
 from model.Field import Field, CityCard, Chance, Railway, Jail
 from control.input import getPlayers
+from model.Player import Player
+
+TOKENS = ["Automobile", "Top Hat", "Penguin", "T-Rex", "Cat"]
 
 def run():
     fields = getFields()
-    players = getPlayers()
+    number = getPlayers()
+    players = create_player(number)
     chances = create_chances()
+    print(chances)
+
+    for i in range(number):
+        print(players[i].nick, players[i].token)
 
 def getFields():
     objects = []
@@ -30,6 +38,17 @@ def getFields():
     for field in fields.items():
         objects.append(field[1])
     return objects
+
+def create_player(number):
+
+    tokens_id = random.sample(range(len(TOKENS)), number)  # choose random token
+    players = []
+
+    for i in range(number):
+        nick = 'Player' + str(i+1)
+        players.append(Player(nick, TOKENS[tokens_id[i]]))
+
+    return players
 
 def create_chances():
     return random.sample(range(-100, 100, 10), 10)
