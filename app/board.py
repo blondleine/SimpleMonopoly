@@ -1,10 +1,11 @@
+import random
 from model.Field import Field, CityCard, Chance, Railway, Jail
-from control.input import getPlayers, createPlayers
+from control.input import getPlayers
 
 def run():
     fields = getFields()
     players = getPlayers()
-    print(players)
+    chances = create_chances()
 
 def getFields():
     objects = []
@@ -29,5 +30,8 @@ def getFields():
     for field in fields.items():
         objects.append(field[1])
     return objects
+
+def create_chances():
+    return random.sample(range(-100, 100, 10), 10)
 
 run()
