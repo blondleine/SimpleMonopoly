@@ -12,12 +12,12 @@ class Player(object):
         self.money = self.MONEY
         self.position = 0
 
-    def diceThrow(self):
-        n = Player.getNumbers(self)
+    def dice_throw(self):
+        i, j = Player.getNumbers(self)
         count = 1
-        while count < 3 and n[0] == n[1]:
+        while count < 3 and i == j:
             count += 1
-            n = Player.getNumbers(self)
+            i, j = Player.getNumbers(self)
             print(count)
             if count == 3:
                 self.move_to_jail()
@@ -26,7 +26,7 @@ class Player(object):
         d1 = random.sample(range(1, 4), 1)
         d2 = random.sample(range(1, 4), 1)
         print(d1, ",", d2)
-        self.move(d1 + d2)
+        # self.move(d1 + d2)
         return d1, d2
 
     def move(self, number):
@@ -35,4 +35,10 @@ class Player(object):
     def move_to_jail(self):
         self.position = 5
         self.in_prison = 3
+
+    def buy_house(self):
+        print("Write the number of houses to buy:")
+
+    def mortgage(self):
+        print("write the name of property to mortgage:")
 

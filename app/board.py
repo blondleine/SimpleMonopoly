@@ -1,6 +1,6 @@
 import random
 from model.Field import Field, CityCard, Chance, Railway, Jail
-from control.input import getPlayers
+from control.input import getPlayers, player_decision
 from model.Player import Player
 
 TOKENS = ["Automobile", "Top Hat", "Penguin", "T-Rex", "Cat"]
@@ -10,10 +10,12 @@ def run():
     number = getPlayers()
     players = create_player(number)
     chances = create_chances()
-    print(chances)
 
+    print(chances)
     for i in range(number):
         print(players[i].nick, players[i].token)
+
+    start_game(players)
 
 def getFields():
     objects = []
@@ -52,5 +54,19 @@ def create_player(number):
 
 def create_chances():
     return random.sample(range(-100, 100, 10), 10)
+
+def start_game(players):
+
+    do = player_decision() #ask what to do
+
+    i = 0
+    if do == 'd':
+        players[i].dice_throw()
+        players[i].move()
+    elif do == 'h':
+        players[i].buy_house()
+
+    else:
+        players[i].mortgage()
 
 run()

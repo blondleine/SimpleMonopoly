@@ -13,3 +13,19 @@ def getPlayers():
             count = 0
 
     return count
+
+
+def player_decision():
+    try:
+        do = str(input("Choose one letter: \n dice throw - d \n buy house/s - h \n mortgage property - m: \n"))
+    except:
+        do = '0'
+
+    while do not in ['d', 'h', 'm']:
+        try:
+            do = str(input("Choose one letter: \n dice throw - d \n buy house/s - h \n mortgage property - m: \n"))
+        except:
+            do = '0'
+
+    return do
+
