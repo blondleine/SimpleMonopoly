@@ -1,6 +1,6 @@
 import random
 from model.Field import Field, CityCard, Chance, Railway, Jail
-from control.input import getPlayers, player_decision
+from control.input import getPlayers, player_decision, what_we_do, field_decisions
 from model.Player import Player
 
 TOKENS = ["Automobile", "Top Hat", "Penguin", "T-Rex", "Cat"]
@@ -10,8 +10,8 @@ def run():
     number = getPlayers()
     players = create_player(number)
     chances = create_chances()
-
     print(chances)
+
     for i in range(number):
         print(players[i].nick, players[i].token)
 
@@ -25,7 +25,7 @@ def getFields():
         '3': CityCard("AB", 3, 15, 50, "RED"),
         '4': Chance("CHANCE", 4),
         '5': Field("JAIL", 5),
-        '6': Railway("COMMUNITY CHEST", 6),
+        '6': Chance("COMMUNITY CHEST", 6),
         '7': CityCard("BA", 7, 20, 90, "GREEN"),
         '8': CityCard("BB", 8, 22, 110, "GREEN"),
         '9': Field("PARKING", 9),
@@ -59,18 +59,25 @@ def start_game(players, fields):
     count = 0
     id = 0
     num_of_players = len(players)
-    while num_of_players > 1:
-        turn(count, id, players, fields)
-        id = (id + 1)
-        if id == num_of_players: #temporarily
+    while num_of_players > 1 and id < num_of_players:
+        if what_we_do() == True:#temporarily
+            # print("******  " + players[id].name +"   ************************************")
+            turn(count, id, players, fields)
+            id = (id + 1)
+        else:
             num_of_players = 1
 
 def turn(count, i, players, fields):
     do = player_decision()  # ask what to do
 
     if do == 'd':
-        field_number = players[i].player_move(count)
-        print("You are standing on " + fields[field_number-1].name)
+        doublet, count = players[i].player_move(count)
+        print("You are standing on " + fields[players[i].position - 1].name)
+        field_decisions(type(fields[players[i].position - 1]).__name__)
+        while doublet == True:
+            doublet, count = players[i].player_move(count)
+            print("You are standing on " + fields[players[i].position - 1].name)
+            field_decisions(type(fields[players[i].position - 1]).__name__)
 
     elif do == 'h':
         players[i].buy_house()

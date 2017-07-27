@@ -13,6 +13,7 @@ class Field(object):
         self.rent = rent
         self.price = price
 
+
 class CityCard(Field):
 
     def __init__(self, name, number, price = 0, rent = 0, district= "", owner = "bank"):
@@ -35,3 +36,4 @@ class Jail(Field):
     def __init__(self, name, number, price=0, rent=0, is_in=False):
         super(Jail, self).__init__(name, number, price, rent)
         self.is_in = is_in
+

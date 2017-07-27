@@ -29,3 +29,31 @@ def player_decision():
 
     return do
 
+def what_we_do():
+    try:
+        do = input("Do you want to roll a dice?(y/n) ")
+    except:
+        do = '0'
+
+    while do not in ['y', 'n']:
+        try:
+            do = input("Do you want to roll a dice?(y/n) ")
+        except:
+            do = '0'
+
+    if do == "y":
+        return True
+    elif do == "n":
+        return False
+
+def field_decisions(type): # another argument to know is the city has an owner
+    if type == 'Field':
+        print("Do nth")
+    elif type == 'CityCard':
+        return input("Choose one letter: \n ")
+    elif type == 'Railway':
+        return input("Choose one letter: \n ")
+    elif type == 'Chance':
+        return input("Choose one letter: \n ")
+    elif type == 'Jail':
+        return input("Choose one letter: \n ")

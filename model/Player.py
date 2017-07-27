@@ -17,8 +17,9 @@ class Player(object):
         return i, j
 
     def getNumbers(self):
-        d1 = random.sample(range(1, 4), 1)[0]
-        d2 = random.sample(range(1, 4), 1)[0]
+        d1 = random.sample(range(1, 6), 1)[0]
+        d2 = random.sample(range(1, 6), 1)[0]
+
         return d1, d2
 
     def move(self, number):
@@ -42,23 +43,27 @@ class Player(object):
             return False
 
     def is_doublet(self, i, j, count):
-        while count < 3 and i == j:
-            print("You've got doublet")
-            self.player_move(count)
+        if count < 3 and i == j:
+            print("It was doublet \n")
+            return True
 
-        if count == 3:
+        elif count == 3 and i == j:
             print("Go to jail!")
-            self.move_to_jail(    )
+            self.move_to_jail()
+            return False
+
+        else:
+            return False
 
     def player_move(self, count):
         x, y = self.dice_roll()
         count += 1
-        # m = x[0] + y[0]
-        self.move(x + y)
+        print(str(count) + "_________________________________________")
         print("Yours dices show: " + str(x) + " and " + str(y))
-#        what field?
-        self.is_doublet(x, y, count)
-
+        self.move(x + y)
         print(self.token + "'ve moved")
+        #        what field?
+        doublet = self.is_doublet(x, y, count)
 
-        return self.position
+        return doublet, count
+
