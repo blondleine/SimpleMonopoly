@@ -12,21 +12,13 @@ class Player(object):
         self.money = self.MONEY
         self.position = 0
 
-    def dice_throw(self):
-        i, j = Player.getNumbers(self)
-        count = 1
-        while count < 3 and i == j:
-            count += 1
-            i, j = Player.getNumbers(self)
-            print(count)
-            if count == 3:
-                self.move_to_jail()
+    def dice_roll(self):
+        i, j = self.getNumbers()
+        return i, j
 
     def getNumbers(self):
-        d1 = random.sample(range(1, 4), 1)
-        d2 = random.sample(range(1, 4), 1)
-        print(d1, ",", d2)
-        # self.move(d1 + d2)
+        d1 = random.sample(range(1, 4), 1)[0]
+        d2 = random.sample(range(1, 4), 1)[0]
         return d1, d2
 
     def move(self, number):
@@ -42,3 +34,31 @@ class Player(object):
     def mortgage(self):
         print("write the name of property to mortgage:")
 
+    def bancruptcy(self):
+
+        if(self.money == 0):
+            return True
+        else:
+            return False
+
+    def is_doublet(self, i, j, count):
+        while count < 3 and i == j:
+            print("You've got doublet")
+            self.player_move(count)
+
+        if count == 3:
+            print("Go to jail!")
+            self.move_to_jail(    )
+
+    def player_move(self, count):
+        x, y = self.dice_roll()
+        count += 1
+        # m = x[0] + y[0]
+        self.move(x + y)
+        print("Yours dices show: " + str(x) + " and " + str(y))
+#        what field?
+        self.is_doublet(x, y, count)
+
+        print(self.token + "'ve moved")
+
+        return self.position

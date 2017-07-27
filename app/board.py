@@ -15,7 +15,7 @@ def run():
     for i in range(number):
         print(players[i].nick, players[i].token)
 
-    start_game(players)
+    start_game(players, fields)
 
 def getFields():
     objects = []
@@ -33,8 +33,8 @@ def getFields():
         '11': CityCard("CA", 11, 26, 130, "BLUE"),
         '12': CityCard("CB", 12, 28, 150, "BLUE"),
         '13': Jail("GO TO JAIL", 13, 0, 0, True),
-        '14': CityCard("DB", 14, 32, 190, "YELLOW"),
-        '15': CityCard("DA", 15, 30, 170, "YELLOW"),
+        '14': CityCard("DA", 14, 32, 190, "YELLOW"),
+        '15': CityCard("DB", 15, 30, 170, "YELLOW"),
         '16': Chance("INCOME TAX", 16, -200)
     }
     for field in fields.items():
@@ -55,18 +55,29 @@ def create_player(number):
 def create_chances():
     return random.sample(range(-100, 100, 10), 10)
 
-def start_game(players):
+def start_game(players, fields):
+    count = 0
+    id = 0
+    num_of_players = len(players)
+    while num_of_players > 1:
+        turn(count, id, players, fields)
+        id = (id + 1)
+        if id == num_of_players: #temporarily
+            num_of_players = 1
 
-    do = player_decision() #ask what to do
+def turn(count, i, players, fields):
+    do = player_decision()  # ask what to do
 
-    i = 0
     if do == 'd':
-        players[i].dice_throw()
-        players[i].move()
+        field_number = players[i].player_move(count)
+        print("You are standing on " + fields[field_number-1].name)
+
     elif do == 'h':
         players[i].buy_house()
+        players[i].dice_roll()
 
-    else:
+    elif do == 'm':
         players[i].mortgage()
+        players[i].dice_roll()
 
 run()
