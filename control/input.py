@@ -46,14 +46,55 @@ def what_we_do():
     elif do == "n":
         return False
 
-def field_decisions(type): # another argument to know is the city has an owner
+def field_decisions(type, has_owner): # another argument to know is the city has an owner
     if type == 'Field':
         print("Do nth")
-    elif type == 'CityCard':
-        return input("Choose one letter: \n ")
-    elif type == 'Railway':
-        return input("Choose one letter: \n ")
+        do = 0
+    elif type == 'CityCard' or type == 'Railway':
+        if has_owner == True:
+            try:
+                do = input("Choose one letter: \n  pay the rent - p \n")
+            except:
+                do = 0
+            while do not in ['b', 'p']:
+                try:
+                    do = input("Choose one letter: \n pay the rent - p \n")
+                except:
+                    do = 0
+        elif has_owner == False:
+            try:
+                do = input("Choose one letter: \n buy it - b \n for the auction - a \n")
+            except:
+                do = 0
+            while do not in ['b', 'a ']:
+                try:
+                    do = input("Choose one letter: \n buy it - b \n for the auction - a \n")
+                except:
+                    do = 0
+
     elif type == 'Chance':
-        return input("Choose one letter: \n ")
-    elif type == 'Jail':
-        return input("Choose one letter: \n ")
+        try:
+            do = input("Choose one letter: \n read it - r \n")
+        except:
+            do = 0
+        while do not in ['r']:
+            try:
+                do = input("Choose one letter: \n read it - r \n")
+            except:
+                do = 0
+    return  do
+
+def auction(price, players):
+    try:
+        nick = input("Write nick (player who gave final offer)")
+    except:
+        nick = 0
+    while nick not in players:
+        try:
+            nick = input("Write nick (player who gave final offer)")
+        except:
+            nick = 0
+
+    offer = input("Write your offer")
+
+    return nick, offer

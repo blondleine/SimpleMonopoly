@@ -1,12 +1,13 @@
 import random
 from model.Field import Field, CityCard, Chance, Railway, Jail
-from control.input import getPlayers, player_decision, what_we_do, field_decisions
+from control.input import getPlayers, player_decision, what_we_do, field_decisions, auction
 from model.Player import Player
 
 TOKENS = ["Automobile", "Top Hat", "Penguin", "T-Rex", "Cat"]
 
 def run():
     fields = getFields()
+    chance_cards = get_chance_cards()
     number = getPlayers()
     players = create_player(number)
     chances = create_chances()
@@ -15,7 +16,7 @@ def run():
     for i in range(number):
         print(players[i].nick, players[i].token)
 
-    start_game(players, fields)
+    start_game(players, fields, chance_cards)
 
 def getFields():
     objects = []
@@ -41,6 +42,12 @@ def getFields():
         objects.append(field[1])
     return objects
 
+def get_chance_cards():
+    cards = {
+        '1': "Pay 200",
+        '2': "Get 200",
+    }
+    return cards
 def create_player(number):
 
     tokens_id = random.sample(range(len(TOKENS)), number)  # choose random token
@@ -55,29 +62,49 @@ def create_player(number):
 def create_chances():
     return random.sample(range(-100, 100, 10), 10)
 
-def start_game(players, fields):
+def start_game(players, fields, chance_cards):
     count = 0
     id = 0
     num_of_players = len(players)
     while num_of_players > 1 and id < num_of_players:
         if what_we_do() == True:#temporarily
             # print("******  " + players[id].name +"   ************************************")
-            turn(count, id, players, fields)
+            turn(count, id, players, fields,chance_cards)
             id = (id + 1)
         else:
             num_of_players = 1
 
-def turn(count, i, players, fields):
+def turn(count, i, players, fields, chance_cards):
     do = player_decision()  # ask what to do
 
     if do == 'd':
         doublet, count = players[i].player_move(count)
-        print("You are standing on " + fields[players[i].position - 1].name)
-        field_decisions(type(fields[players[i].position - 1]).__name__)
+        print("You are standing on " + fields[players[i].position - 1].name + "\n *** \n")
+
+        if fields[players[i].position - 1].owner == "bank":
+            do_it = field_decisions(type(fields[players[i].position - 1]).__name__, False)
+        else:
+            do_it = field_decisions(type(fields[players[i].position - 1]).__name__, True)
         while doublet == True:
             doublet, count = players[i].player_move(count)
-            print("You are standing on " + fields[players[i].position - 1].name)
-            field_decisions(type(fields[players[i].position - 1]).__name__)
+            print("You are standing on " + fields[players[i].position - 1].name + "\n *** \n")
+            if fields[players[i].position - 1].owner == "bank":
+                do_it = field_decisions(type(fields[players[i].position - 1]).__name__, False)
+            else:
+                do_it = field_decisions(type(fields[players[i].position - 1]).__name__, True)
+
+        if do_it == 'a':
+            player, offer = auction(fields[players[i].position - 1].price, players)
+            buy_it(players[i], fields[players[i].position - 1].price / 2)
+
+        elif do_it == 'b':
+            buy_it(players[i], fields[players[i].position - 1], fields[players[i].position - 1].price)
+
+        elif do_it == 'p':
+            pay_rent(players, i, fields, players[i].position - 1)
+
+        elif do_it == 'r':
+            pass
 
     elif do == 'h':
         players[i].buy_house()
@@ -87,4 +114,16 @@ def turn(count, i, players, fields):
         players[i].mortgage()
         players[i].dice_roll()
 
+def buy_it(player, card, price):
+    card.owner = player.nick
+    player.money = player.money - price
+
+def pay_rent(players, i, fields, position):
+    rent = fields[position].rent #check which value of the rent (owner of all district) ->>filter and maps
+    players[i].money = players[i].money - rent
+    #filter the player by nick (it is in field.owner) and add him money
+
+def read_it(chance_cards):
+    x = str(random.sample(range(1, len(chance_cards)), 1)[0])
+    return chance_cards[x]
 run()

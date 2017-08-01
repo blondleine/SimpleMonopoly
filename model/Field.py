@@ -7,12 +7,12 @@ DISTRICT = {
 
 class Field(object):
 
-    def __init__(self, name, number, price = 0, rent = 0):
+    def __init__(self, name, number, price = 0, rent = 0, owner = "bank"):
         self.name = name
         self.number = number
         self.rent = rent
         self.price = price
-
+        self.owner = owner
 
 class CityCard(Field):
 
@@ -29,11 +29,14 @@ class Railway(Field):
 
 
 class Chance(Field):
-    def __init__(self, name, number, price=0, rent=0):
+    def __init__(self, name, number, price=0, rent=0, owner = "bank"):
         super(Chance, self).__init__(name, number, price, rent)
+        self.owner = owner
+
 
 class Jail(Field):
-    def __init__(self, name, number, price=0, rent=0, is_in=False):
+    def __init__(self, name, number, price=0, rent=0, is_in=False, owner = "bank"):
         super(Jail, self).__init__(name, number, price, rent)
         self.is_in = is_in
+        self.owner = owner
 
