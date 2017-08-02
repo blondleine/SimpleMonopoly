@@ -22,21 +22,21 @@ def getFields():
     objects = []
     fields = {
         '1': Field("START", 1),
-        '2': CityCard("AA", 2, 15, 50, "RED"),
-        '3': CityCard("AB", 3, 15, 50, "RED"),
+        '2': CityCard("AA", 2, 50, 15, "RED"),
+        '3': CityCard("AB", 3, 50, 15, "RED"),
         '4': Chance("CHANCE", 4),
         '5': Field("JAIL", 5),
         '6': Chance("COMMUNITY CHEST", 6),
-        '7': CityCard("BA", 7, 20, 90, "GREEN"),
-        '8': CityCard("BB", 8, 22, 110, "GREEN"),
+        '7': CityCard("BA", 7, 90, 20, "GREEN"),
+        '8': CityCard("BB", 8, 110, 22, "GREEN"),
         '9': Field("PARKING", 9),
         '10': Railway("AAA", 10, 8, 6),
-        '11': CityCard("CA", 11, 26, 130, "BLUE"),
-        '12': CityCard("CB", 12, 28, 150, "BLUE"),
+        '11': CityCard("CA", 11, 130, 26, "BLUE"),
+        '12': CityCard("CB", 12, 150, 28, "BLUE"),
         '13': Jail("GO TO JAIL", 13, 0, 0, True),
-        '14': CityCard("DA", 14, 32, 190, "YELLOW"),
-        '15': CityCard("DB", 15, 30, 170, "YELLOW"),
-        '16': Chance("INCOME TAX", 16, -200)
+        '14': CityCard("DA", 14, 190, 32, "YELLOW"),
+        '15': CityCard("DB", 15, 170, 30, "YELLOW"),
+        '16': Chance("CHANCE", 16)
     }
     for field in fields.items():
         objects.append(field[1])
@@ -44,8 +44,14 @@ def getFields():
 
 def get_chance_cards():
     cards = {
-        '1': "Pay 200",
-        '2': "Get 200",
+        '1': (-200),
+        '2': ( 200),
+        '3': (-100),
+        '4': (100),
+        '5': (-150),
+        '6': (150),
+        '7': (-50),
+        '8': ( 50)
     }
     return cards
 def create_player(number):
@@ -67,8 +73,8 @@ def start_game(players, fields, chance_cards):
     id = 0
     num_of_players = len(players)
     while num_of_players > 1 and id < num_of_players:
+        print("*********************************** " + players[id].nick + "'s turn ***********************************")
         if what_we_do() == True:#temporarily
-            # print("******  " + players[id].name +"   ************************************")
             turn(count, id, players, fields,chance_cards)
             id = (id + 1)
         else:
@@ -78,13 +84,8 @@ def turn(count, i, players, fields, chance_cards):
     do = player_decision()  # ask what to do
 
     if do == 'd':
-        doublet, count = players[i].player_move(count)
-        print("You are standing on " + fields[players[i].position - 1].name + "\n *** \n")
+        doublet = True
 
-        if fields[players[i].position - 1].owner == "bank":
-            do_it = field_decisions(type(fields[players[i].position - 1]).__name__, False)
-        else:
-            do_it = field_decisions(type(fields[players[i].position - 1]).__name__, True)
         while doublet == True:
             doublet, count = players[i].player_move(count)
             print("You are standing on " + fields[players[i].position - 1].name + "\n *** \n")
@@ -92,38 +93,57 @@ def turn(count, i, players, fields, chance_cards):
                 do_it = field_decisions(type(fields[players[i].position - 1]).__name__, False)
             else:
                 do_it = field_decisions(type(fields[players[i].position - 1]).__name__, True)
+            if do_it == 'a':
+                player, offer = auction(fields[players[i].position - 1].price, players)
+                buy_it(player, fields[players[i].position - 1], offer)
 
-        if do_it == 'a':
-            player, offer = auction(fields[players[i].position - 1].price, players)
-            buy_it(players[i], fields[players[i].position - 1].price / 2)
+            elif do_it == 'b':
+                buy_it(players[i], fields[players[i].position - 1], fields[players[i].position - 1].price)
 
-        elif do_it == 'b':
-            buy_it(players[i], fields[players[i].position - 1], fields[players[i].position - 1].price)
+            elif do_it == 'p':
+                pay_rent(players, i, fields, players[i].position - 1)
 
-        elif do_it == 'p':
-            pay_rent(players, i, fields, players[i].position - 1)
-
-        elif do_it == 'r':
-            pass
+            elif do_it == 'r':
+                amount = read_it(chance_cards)
+                if amount > 0:
+                    print("You get " + str(amount))
+                elif amount < 0:
+                    print("You pay " + str(-amount))
+                elif amount == 0:
+                    pass
+                print(players[i].nick + " had " + str(players[i].money))
+                
+                players[i].money = players[i].money + amount
+                
+                print ("Now " + players[i].nick + " has " + str(players[i].money))
 
     elif do == 'h':
-        players[i].buy_house()
-        players[i].dice_roll()
+        players[i].buy_house()# parameter from control package
+        players[i].dice_throw()
 
     elif do == 'm':
-        players[i].mortgage()
-        players[i].dice_roll()
+        players[i].mortgage()# parameter from control package
+        players[i].dice_throw()
 
 def buy_it(player, card, price):
     card.owner = player.nick
     player.money = player.money - price
-
+    print(card.owner + "'ve bought it for " + str(price) + "\n" + player.nick + " has " + str(player.money))
 def pay_rent(players, i, fields, position):
+    owner = list(filter(lambda x: x.nick == fields[position].owner, players))[0]
     rent = fields[position].rent #check which value of the rent (owner of all district) ->>filter and maps
-    players[i].money = players[i].money - rent
-    #filter the player by nick (it is in field.owner) and add him money
 
-def read_it(chance_cards):
-    x = str(random.sample(range(1, len(chance_cards)), 1)[0])
-    return chance_cards[x]
+    print(players[i].nick + " has " + str(players[i].money) + "\n")
+    print(fields[position].owner +" (" + owner.nick + ") " + " has " + str(owner.money) + "\n")
+    players[i].money = players[i].money - rent
+    owner.money += rent
+    #filter the player by nick (it is in field.owner) and add him money
+    print(players[i].nick + "'ve paid " + str(rent) + " for " + fields[position].owner + "\n")
+    print(players[i].nick + " has " + str(players[i].money) + "\n")
+    print(fields[position].owner +" (" + owner.nick + ") " + " has " + str(owner.money) + "\n")
+
+def read_it(cards):
+    x = str(random.sample(range(1, len(cards)), 1)[0])
+
+    return cards[x]
 run()

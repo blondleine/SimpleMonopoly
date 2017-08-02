@@ -66,7 +66,7 @@ def field_decisions(type, has_owner): # another argument to know is the city has
                 do = input("Choose one letter: \n buy it - b \n for the auction - a \n")
             except:
                 do = 0
-            while do not in ['b', 'a ']:
+            while do not in ['b', 'a']:
                 try:
                     do = input("Choose one letter: \n buy it - b \n for the auction - a \n")
                 except:
@@ -82,14 +82,16 @@ def field_decisions(type, has_owner): # another argument to know is the city has
                 do = input("Choose one letter: \n read it - r \n")
             except:
                 do = 0
-    return  do
+    return do
 
 def auction(price, players):
+    print ("Start offer is " + str(price/2))
+    users = map(lambda x: x.nick, players)
     try:
         nick = input("Write nick (player who gave final offer)")
     except:
         nick = 0
-    while nick not in players:
+    while nick not in users:
         try:
             nick = input("Write nick (player who gave final offer)")
         except:

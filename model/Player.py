@@ -12,7 +12,7 @@ class Player(object):
         self.money = self.MONEY
         self.position = 0
 
-    def dice_roll(self):
+    def dice_throw(self):
         i, j = self.getNumbers()
         return i, j
 
@@ -30,10 +30,10 @@ class Player(object):
         self.in_prison = 3
 
     def buy_house(self):
-        print("Write the number of houses to buy:")
+        print("NOT DONE YET")
 
     def mortgage(self):
-        print("write the name of property to mortgage:")
+        print("NOT DONE YET")
 
     def bancruptcy(self):
 
@@ -56,9 +56,10 @@ class Player(object):
             return False
 
     def player_move(self, count):
-        x, y = self.dice_roll()
+        x, y = self.dice_throw()
         count += 1
-        print(str(count) + "_________________________________________")
+        print("____________" + self.nick + " -> "
+              + str(count) + " dice throw _________________________________________________")
         print("Yours dices show: " + str(x) + " and " + str(y))
         self.move(x + y)
         print(self.token + "'ve moved")
