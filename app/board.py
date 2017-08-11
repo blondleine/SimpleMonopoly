@@ -1,24 +1,24 @@
 import random
 from model.Field import Field, CityCard, Chance, Railway, Jail
-from control.input import getPlayers, player_decision, what_we_do, field_decisions, auction
+from control.input import player_decision, what_we_do, field_decisions, auction
 from model.Player import Player
+from gui.StartFrame import StartFrame
+from gui.GameFrame import GameFrame
 
 TOKENS = ["Automobile", "Top Hat", "Penguin", "T-Rex", "Cat"]
 
+
 def run():
-    fields = getFields()
+    fields = get_fields()
     chance_cards = get_chance_cards()
-    number = getPlayers()
-    players = create_player(number)
-    chances = create_chances()
-    print(chances)
-
-    for i in range(number):
-        print(players[i].nick, players[i].token)
-
+    # start frame
+    start_frame = StartFrame(TOKENS)
+    players = create_player(start_frame.players_nicks, start_frame.players_tokens)
+    # game frame
     start_game(players, fields, chance_cards)
+    # game_frame = GameFrame()
 
-def getFields():
+def get_fields():
     objects = []
     fields = {
         '1': Field("START", 1),
@@ -42,43 +42,43 @@ def getFields():
         objects.append(field[1])
     return objects
 
+
 def get_chance_cards():
     cards = {
         '1': (-200),
-        '2': ( 200),
+        '2': 200,
         '3': (-100),
-        '4': (100),
+        '4': 100,
         '5': (-150),
-        '6': (150),
+        '6': 150,
         '7': (-50),
-        '8': ( 50)
+        '8': 50
     }
     return cards
-def create_player(number):
 
-    tokens_id = random.sample(range(len(TOKENS)), number)  # choose random token
+
+def create_player(nicks, tokens):
+
     players = []
 
-    for i in range(number):
-        nick = 'Player' + str(i+1)
-        players.append(Player(nick, TOKENS[tokens_id[i]]))
+    for i in range(len(nicks)):
+        players.append(Player(nicks[i], tokens[i]))
 
     return players
 
-def create_chances():
-    return random.sample(range(-100, 100, 10), 10)
 
 def start_game(players, fields, chance_cards):
     count = 0
     id = 0
     num_of_players = len(players)
-    while num_of_players > 1 and id < num_of_players:
+    while num_of_players > 1 and num_of_players > id:
         print("*********************************** " + players[id].nick + "'s turn ***********************************")
-        if what_we_do() == True:#temporarily
-            turn(count, id, players, fields,chance_cards)
-            id = (id + 1)
+        if what_we_do():  # temporarily
+            turn(count, id, players, fields, chance_cards)
+            id += 1
         else:
             num_of_players = 1
+
 
 def turn(count, i, players, fields, chance_cards):
     do = player_decision()  # ask what to do
@@ -86,7 +86,7 @@ def turn(count, i, players, fields, chance_cards):
     if do == 'd':
         doublet = True
 
-        while doublet == True:
+        while doublet:
             doublet, count = players[i].player_move(count)
             print("You are standing on " + fields[players[i].position - 1].name + "\n *** \n")
             if fields[players[i].position - 1].owner == "bank":
@@ -115,32 +115,36 @@ def turn(count, i, players, fields, chance_cards):
                 
                 players[i].money = players[i].money + amount
                 
-                print ("Now " + players[i].nick + " has " + str(players[i].money))
+                print("Now " + players[i].nick + " has " + str(players[i].money))
 
     elif do == 'h':
-        players[i].buy_house()# parameter from control package
+        players[i].buy_house()  # parameter from control package
         players[i].dice_throw()
 
     elif do == 'm':
-        players[i].mortgage()# parameter from control package
+        players[i].mortgage()  # parameter from control package
         players[i].dice_throw()
+
 
 def buy_it(player, card, price):
     card.owner = player.nick
     player.money = player.money - price
     print(card.owner + "'ve bought it for " + str(price) + "\n" + player.nick + " has " + str(player.money))
+
+
 def pay_rent(players, i, fields, position):
     owner = list(filter(lambda x: x.nick == fields[position].owner, players))[0]
-    rent = fields[position].rent #check which value of the rent (owner of all district) ->>filter and maps
+    rent = fields[position].rent  # check which value of the rent (owner of all district) ->>filter and maps
 
     print(players[i].nick + " has " + str(players[i].money) + "\n")
-    print(fields[position].owner +" (" + owner.nick + ") " + " has " + str(owner.money) + "\n")
+    print(fields[position].owner + " (" + owner.nick + ") " + " has " + str(owner.money) + "\n")
     players[i].money = players[i].money - rent
     owner.money += rent
-    #filter the player by nick (it is in field.owner) and add him money
+    # filter the player by nick (it is in field.owner) and add him money
     print(players[i].nick + "'ve paid " + str(rent) + " for " + fields[position].owner + "\n")
     print(players[i].nick + " has " + str(players[i].money) + "\n")
-    print(fields[position].owner +" (" + owner.nick + ") " + " has " + str(owner.money) + "\n")
+    print(fields[position].owner + " (" + owner.nick + ") " + " has " + str(owner.money) + "\n")
+
 
 def read_it(cards):
     x = str(random.sample(range(1, len(cards)), 1)[0])
