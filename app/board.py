@@ -73,11 +73,13 @@ def start_game(players, fields, chance_cards):
     count = 0
     id = 0
     num_of_players = len(players)
-    while num_of_players > 1 and id < num_of_players:
+    while num_of_players > 1:
         print("*********************************** " + players[id].nick + "'s turn ***********************************")
 
         turn(count, id, players, fields, chance_cards)
-        id = (id + 1)
+        id += 1
+        if id > num_of_players-1:
+            id = id - num_of_players
 
 
 def turn(count, i, players, fields, chance_cards):
@@ -117,6 +119,7 @@ def turn(count, i, players, fields, chance_cards):
                 players[i].money = players[i].money + amount
                 
                 print("Now " + players[i].nick + " has " + str(players[i].money))
+
 
     elif do == 'h':
         players[i].buy_house()  # parameter from control package

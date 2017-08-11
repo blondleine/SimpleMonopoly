@@ -58,10 +58,6 @@ def buy_house():
     print("NOT DONE YET")
 
 
-def mortgage():
-    print("NOT DONE YET")
-
-
 def get_numbers():
     d1 = random.sample(range(1, 6), 1)[0]
     d2 = random.sample(range(1, 6), 1)[0]
