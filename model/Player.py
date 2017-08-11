@@ -2,6 +2,7 @@ import random
 
 FIELDS_SIZE = 16
 
+
 class Player(object):
     MONEY = 1500
     in_prison = 0
@@ -12,16 +13,6 @@ class Player(object):
         self.money = self.MONEY
         self.position = 0
 
-    def dice_throw(self):
-        i, j = self.getNumbers()
-        return i, j
-
-    def getNumbers(self):
-        d1 = random.sample(range(1, 6), 1)[0]
-        d2 = random.sample(range(1, 6), 1)[0]
-
-        return d1, d2
-
     def move(self, number):
         self.position = (self.position + number) % FIELDS_SIZE
 
@@ -29,15 +20,9 @@ class Player(object):
         self.position = 5
         self.in_prison = 3
 
-    def buy_house(self):
-        print("NOT DONE YET")
-
-    def mortgage(self):
-        print("NOT DONE YET")
-
     def bancruptcy(self):
 
-        if(self.money == 0):
+        if self.money == 0:
             return True
         else:
             return False
@@ -56,15 +41,34 @@ class Player(object):
             return False
 
     def player_move(self, count):
-        x, y = self.dice_throw()
+        x, y = dice_throw()
         count += 1
         print("____________" + self.nick + " -> "
               + str(count) + " dice throw _________________________________________________")
         print("Yours dices show: " + str(x) + " and " + str(y))
         self.move(x + y)
         print(self.token + "'ve moved")
-        #        what field?
+        # what field?
         doublet = self.is_doublet(x, y, count)
 
         return doublet, count
 
+
+def buy_house():
+    print("NOT DONE YET")
+
+
+def mortgage():
+    print("NOT DONE YET")
+
+
+def get_numbers():
+    d1 = random.sample(range(1, 6), 1)[0]
+    d2 = random.sample(range(1, 6), 1)[0]
+
+    return d1, d2
+
+
+def dice_throw():
+    i, j = get_numbers()
+    return i, j

@@ -1,6 +1,4 @@
-import random
-
-def getPlayers():
+def get_players():
     try:
         count = int(input("Enter the number of players (2 to 5):"))
     except:
@@ -15,43 +13,33 @@ def getPlayers():
     return count
 
 
-def player_decision():
+def player_decision(is_owner):
+    if is_owner:
+        ask = "Choose one letter: \n dice throw - d \n buy house/s - h \n"
+        options = ['d', 'h']
+    else:
+        ask = "Choose one letter: \n dice throw - d \n"
+        options = ['d']
     try:
-        do = str(input("Choose one letter: \n dice throw - d \n buy house/s - h \n mortgage property - m: \n"))
+        do = str(input(ask))
     except:
         do = '0'
 
-    while do not in ['d', 'h', 'm']:
+    while do not in options:
         try:
-            do = str(input("Choose one letter: \n dice throw - d \n buy house/s - h \n mortgage property - m: \n"))
+            do = str(input(ask))
         except:
             do = '0'
 
     return do
 
-def what_we_do():
-    try:
-        do = input("Do you want to roll a dice?(y/n) ")
-    except:
-        do = '0'
 
-    while do not in ['y', 'n']:
-        try:
-            do = input("Do you want to roll a dice?(y/n) ")
-        except:
-            do = '0'
-
-    if do == "y":
-        return True
-    elif do == "n":
-        return False
-
-def field_decisions(type, has_owner): # another argument to know is the city has an owner
+def field_decisions(type, has_owner):  # another argument to know is the city has an owner
     if type == 'Field':
         print("Do nth")
         do = 0
     elif type == 'CityCard' or type == 'Railway':
-        if has_owner == True:
+        if has_owner:
             try:
                 do = input("Choose one letter: \n  pay the rent - p \n")
             except:
@@ -61,7 +49,7 @@ def field_decisions(type, has_owner): # another argument to know is the city has
                     do = input("Choose one letter: \n pay the rent - p \n")
                 except:
                     do = 0
-        elif has_owner == False:
+        elif not has_owner:
             try:
                 do = input("Choose one letter: \n buy it - b \n for the auction - a \n")
             except:
@@ -84,8 +72,9 @@ def field_decisions(type, has_owner): # another argument to know is the city has
                 do = 0
     return do
 
+
 def auction(price, players):
-    print ("Start offer is " + str(price/2))
+    print("Start offer is " + str(price/2))
     users = map(lambda x: x.nick, players)
     try:
         nick = input("Write nick (player who gave final offer)")
@@ -97,6 +86,14 @@ def auction(price, players):
         except:
             nick = 0
 
-    offer = input("Write your offer")
+    try:
+        offer = int(input("Write your offer"))
+    except:
+        offer = 0
+    while offer < price/2:
+        try:
+            offer = int(input("Write your offer"))
+        except:
+            offer = 0
 
     return nick, offer
