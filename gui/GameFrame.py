@@ -1,28 +1,23 @@
-from tkinter import *
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+from __future__ import unicode_literals
+from PyQt5.QtCore import QSize
+from PyQt5.QtGui import QImage, QPalette, QBrush
+from PyQt5.QtWidgets import *
 
 
-class GameFrame(object):
-    def __init__(self):
-        self.gui = Tk()
-        self.gui.geometry('700x700')
-        self.gui.title('Monopoly')
+class GameFrame(QWidget):
+    def __init__(self, parent=None):
+        super(GameFrame, self).__init__(parent)
+        oImage = QImage("board.png")
+        self.main_window()
 
-        # FRAMES
-        self.frame = Frame(self.gui)
-        self.frame.pack()
+        sImage = oImage.scaled(QSize(300, 200))  # resize Image to widgets size
+        palette = QPalette()
+        self.setPalette(palette)
 
-        self.boardTitle = Label(self.frame, text="Create new player")
-        self.boardTitle.config(font=("Calibri", 14))
-        self.boardTitleCom = Label(self.frame, text="(2 to 5 players)")
-        self.boardTitleCom.config(font=("Calibri", 10))
-
-        # MENU
-        self.menubar = Menu(self.gui)
-
-        self.startMenu = Menu(self.menubar, tearoff=0)
-        self.startMenu.add_command(label="Close", command=lambda: self.gui.destroy())
-        self.menubar.add_cascade(label="Menu", menu=self.startMenu)
-
-        self.gui.config(menu=self.menubar)
-
-        self.gui.mainloop()
+    def main_window(self):
+        self.resize(900, 800)
+        self.setWindowTitle("Monopoly")
+        self.show()

@@ -1,22 +1,26 @@
 import random
+import sys
 from model.Field import Field, CityCard, Chance, Railway, Jail
 from control.input import player_decision, what_we_do, field_decisions, auction
 from model.Player import Player
 from gui.StartFrame import StartFrame
-from gui.GameFrame import GameFrame
+from gui.GameFrame import GameFrame, QApplication
 
 TOKENS = ["Automobile", "Top Hat", "Penguin", "T-Rex", "Cat"]
 
 
 def run():
+    # game frame
+    app = QApplication(sys.argv)
+    game_frame = GameFrame()
+    sys.exit(app.exec_())
     fields = get_fields()
     chance_cards = get_chance_cards()
     # start frame
     start_frame = StartFrame(TOKENS)
     players = create_player(start_frame.players_nicks, start_frame.players_tokens)
-    # game frame
     start_game(players, fields, chance_cards)
-    # game_frame = GameFrame()
+
 
 def get_fields():
     objects = []
@@ -34,8 +38,8 @@ def get_fields():
         '11': CityCard("CA", 11, 130, 26, "BLUE"),
         '12': CityCard("CB", 12, 150, 28, "BLUE"),
         '13': Jail("GO TO JAIL", 13, 0, 0, True),
-        '14': CityCard("DA", 14, 190, 32, "YELLOW"),
-        '15': CityCard("DB", 15, 170, 30, "YELLOW"),
+        '14': CityCard("DA", 14, 170, 32, "YELLOW"),
+        '15': CityCard("DB", 15, 190, 30, "YELLOW"),
         '16': Chance("CHANCE", 16)
     }
     for field in fields.items():
