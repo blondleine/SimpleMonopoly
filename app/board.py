@@ -4,22 +4,22 @@ from model.Field import Field, CityCard, Chance, Railway, Jail
 from control.input import player_decision, what_we_do, field_decisions, auction
 from model.Player import Player
 from gui.StartFrame import StartFrame
-from gui.GameFrame import GameFrame, QApplication
+from gui.GameFrame import create_frame
 
 TOKENS = ["Automobile", "Top Hat", "Penguin", "T-Rex", "Cat"]
 
 
 def run():
-    # game frame
-    app = QApplication(sys.argv)
-    game_frame = GameFrame()
-    sys.exit(app.exec_())
-    fields = get_fields()
-    chance_cards = get_chance_cards()
-    # start frame
-    start_frame = StartFrame(TOKENS)
-    players = create_player(start_frame.players_nicks, start_frame.players_tokens)
-    start_game(players, fields, chance_cards)
+    # fields = get_fields()
+    # chance_cards = get_chance_cards()
+    # # start frame
+    # start_frame = StartFrame(TOKENS)
+    # players = create_player(start_frame.players_nicks, start_frame.players_tokens)
+    # # game frame
+
+    create_frame()
+
+    # start_game(players, fields, chance_cards)
 
 
 def get_fields():
@@ -84,6 +84,7 @@ def start_game(players, fields, chance_cards):
             num_of_players = 1
 
 
+
 def turn(count, i, players, fields, chance_cards):
     do = player_decision()  # ask what to do
 
@@ -116,10 +117,11 @@ def turn(count, i, players, fields, chance_cards):
                 elif amount == 0:
                     pass
                 print(players[i].nick + " had " + str(players[i].money))
-                
+
                 players[i].money = players[i].money + amount
-                
+
                 print("Now " + players[i].nick + " has " + str(players[i].money))
+
 
     elif do == 'h':
         players[i].buy_house()  # parameter from control package
@@ -128,6 +130,7 @@ def turn(count, i, players, fields, chance_cards):
     elif do == 'm':
         players[i].mortgage()  # parameter from control package
         players[i].dice_throw()
+
 
 
 def buy_it(player, card, price):

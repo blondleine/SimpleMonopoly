@@ -1,23 +1,46 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-
-from __future__ import unicode_literals
-from PyQt5.QtCore import QSize
-from PyQt5.QtGui import QImage, QPalette, QBrush
-from PyQt5.QtWidgets import *
+import sys
+from PyQt5.QtWidgets import QApplication, QWidget, QLabel
+from PyQt5.QtGui import QIcon, QPixmap
 
 
 class GameFrame(QWidget):
-    def __init__(self, parent=None):
-        super(GameFrame, self).__init__(parent)
-        oImage = QImage("board.png")
-        self.main_window()
+    def __init__(self):
+        super().__init__()
+        # self.players = players
+        self.title = 'Monopoly'
+        self.width = 1100
+        self.height = 900
+        self.left = 30
+        self.top = 50
 
-        sImage = oImage.scaled(QSize(300, 200))  # resize Image to widgets size
-        palette = QPalette()
-        self.setPalette(palette)
+        self.setWindowTitle(self.title)
+        self.setGeometry(self.left, self.top, self.width, self.height)
 
-    def main_window(self):
-        self.resize(900, 800)
-        self.setWindowTitle("Monopoly")
+        self.init_board()
+        self.show_players()
         self.show()
+
+    def init_board(self):
+
+        label = QLabel(self)
+        pixmap = QPixmap('board.png')
+        label.setPixmap(pixmap)
+        label.setGeometry(self.left, self.top, pixmap.width(), pixmap.height())
+        print("allll")
+        self.show()
+
+    def show_players(self):
+        pass
+
+
+def create_frame():
+    # if __name__ == '__main__':
+    #     app = QApplication(sys.argv)
+    # sys.exit(app.exec_())
+    #
+    # return ex
+    pass
+
+GameFrame()
+
+# create_frame()
